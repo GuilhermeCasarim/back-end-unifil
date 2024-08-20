@@ -7,3 +7,6 @@ router.get('/enderecos/:Id', enderecoController.getEnderecoById)
 router.put('/enderecos/:Id', enderecoController.updateEndereco)    
 router.delete('/enderecos/:Id', enderecoController.deleteEndereco)    
 module.exports = router
+
+//metodo, url e funcao
+//post = insert no sql

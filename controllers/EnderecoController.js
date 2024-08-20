@@ -31,6 +31,21 @@ exports.getAllEnderecos = async(req, res) => {
     }
 }
 
+exports.getEnderecoById = async (req, res) => {
+    try{
+        const { Id } = req.params;
+        const endereco = await Endereco.findByPk(Id);
+
+        if (!endereco) {
+            return res.status(404).json({ error: 'Endereço não encontrado' });
+        }
+
+        res.status(200).json(enderecos);
+    } catch (error){
+        res.status(500).json({ error: 'Erro ao buscar endereço', details: error.message });
+    }
+};
+
 
 
 exports.updateEndereco = async(req, res) => {
@@ -38,7 +53,7 @@ exports.updateEndereco = async(req, res) => {
         const {Id} = req.params
         const {Cep, Logradouro, Complemento, Bairro, Cidade, Estado, MunicipioIBGE} = req.body
 
-        const endereco = await Endereco.findByPk(Id)
+        const endereco = await Endereco.findByPk(Id) //where sql
         if(!endereco){
             return res.status(404).json({error: 'Endereço não encontrado'})
         }
