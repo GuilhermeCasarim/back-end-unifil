@@ -20,8 +20,6 @@ exports.createEndereco = async (req, res) => {
     }
 }
 
-
-
 exports.getAllEnderecos = async(req, res) => {
     try{
         const enderecos = await Endereco.findAll()
@@ -45,8 +43,6 @@ exports.getEnderecoById = async (req, res) => {
         res.status(500).json({ error: 'Erro ao buscar endereço', details: error.message });
     }
 };
-
-
 
 exports.updateEndereco = async(req, res) => {
     try{
@@ -95,3 +91,35 @@ exports.deleteEndereco = async(req, res) => {
     }
 }
 
+//teste
+const axios = require('axios')
+
+exports.getCEP = async (req, res) => {
+
+    try{
+        const cep = req.body
+
+        const api = await axios.get(`https://viacep.com.br/ws/${cep}/json/`);
+
+        if (!api) {
+            return res.status(404).json({ error: 'Endereço não encontrado' });
+        }
+
+        const {logradouro, bairro, localidade, uf, ibge} = api.data
+
+        const novoEndereco = await Endereco.create({
+            Cep: cep,
+            Logradouro: logradouro,
+            Numero: req.body.numero,
+            Complemento: req.body.complemento, 
+            Bairro: bairro,
+            Cidade: localidade, 
+            Estado: uf, 
+            MunicipioIBGE: ibge
+        });
+
+        res.status(200).json(novoEndereco);
+    } catch (error){
+        res.status(500).json({ error: 'Erro ao buscar endereço', details: error.message });
+    }
+};
